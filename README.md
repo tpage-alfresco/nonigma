@@ -4,7 +4,7 @@ The nine-wheeled cardboard enigma machine.
 
 ## Background
 
-A family member designed this stunning cardboard enigma machine and so I decided to turn it into code so that the whole world could benefit from it's colourful encryption.
+A family member designed this stunning cardboard enigma machine and so I decided to turn it into code so that the whole world could benefit from its colourful encryption.
 
 ![Cardboard Nonigma Machine](cardboard-nonigma.jpg)
 
