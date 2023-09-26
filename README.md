@@ -13,7 +13,7 @@ A family member designed this stunning cardboard enigma machine and so I decided
 The machine contains nine wheels. The eight around the edge have 18 connections each and can be interchanged with each other, while the central red wheel has 24 connections and joins onto the other eight. Around the edge of the machine are the letters and symbols. The machine works with the following 72-letter alphabet:
 
 ```
-abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ.!,'?*-🙂🙁/
+abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ.!,'?•-🙂🙁/
 ```
 
 The key for the machine consists of a sequence of colours and a sequence of numbers. The colours indicate which wheel to put in each slot (reading order - left to right and top to bottom) and the numbers indicate the initial position of each wheel. In the picture then the machine has been set with the key:
