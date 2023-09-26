@@ -62,6 +62,6 @@ python3 nonigma.py -w lg,dg,bl,pu,re,or,pi,pe,gr -p 11,14,12,11,17,9,9,13,0 -i e
 
 ## Security
 
-The key size for this algorithm is not awful. There are eight interchangable wheels and each can be initialised in one of 18 positions. The central wheel adds a further 24 posibilities. This gives a key space of `8!*18^8*24` or `10663795450183680` potential keys - a key size of roughly 53 bits. Searching these exhaustively could take a month or so.
+The key size for this algorithm is not awful. There are eight interchangable wheels and each can be initialised in one of 18 positions. The central wheel adds a further 24 posibilities. This gives a key space of `8!*18^8*24` or `10663795450183680` potential keys - a key size of roughly 53 bits. Searching these exhaustively could take a month or so. This could be improved further by adding more wheel options or by drawing lines on the back of each wheel.
 
 However there are a number of issues with this algorithm which can be exploited to speed things up dramatically. A piece of English text has been encrypted in `example_encrypted.txt` and you might like to attempt to decrypt this as a challenge!
