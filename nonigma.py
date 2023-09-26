@@ -1,6 +1,17 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+import argparse
+
+parser = argparse.ArgumentParser(prog='nonigma', description='Encrypt or decrypt messages using the nonigma algorithm. The message must either be supplied as an argument or a file.')
+parser.add_argument('-w', '--wheelorder', required=True, help='comma separated list of wheels - e.g. lg,dg,bl,pu,re,or,pi,pe,gr')
+parser.add_argument('-p', '--wheelpositions', required=True, help='comma separated list of wheel starting positions - e.g. 11,14,12,11,17,9,9,13,0')
+parser.add_argument('-i', '--infile', required=False, help='path to an input file')
+parser.add_argument('-o', '--outfile', required=False, help='path to an output file (or will output to stdout)')
+parser.add_argument('-m', '--message', required=False, help='message to encrypt or decrypt')
+parser.add_argument('-s', '--strip', action='store_true', help='filter out unsupported characters (rather than throw an error)')
+args = parser.parse_args()
+
 wheel_set = {
     'lg': [+8, +4, -7, -5, +5, -4, +6, +3, -8, -5, -3, +4, -6, +7, +3, -4, +5, -3], # Light green
     'dg': [-9, +6, -8, -5, +4, +5, +8, -6, -4, +9, -5, +6, +8, +2, -8, -2, +5, -6], # Dark green
@@ -35,7 +46,9 @@ def encode_letter(letter, state):
         if letter in slot:
             terminal = [slot_index, slot.index(letter)]
     if terminal == None:
-        print('Unsupported character:', letter)
+        if args.strip:
+            return ''
+        raise Exception(f'Unsupported character: "{letter}"')
     start_slot_index = terminal[0]
     wheel = wheels[terminal[0]]
     slot_size = slot_sizes[terminal[0]]
@@ -58,36 +71,64 @@ def encode_letter(letter, state):
     wheel_positions[end_slot_index] = (wheel_positions[end_slot_index] + 1) % slot_sizes[end_slot_index]
     return output
 
-# Run some tests that the program has the same connections as the cardboard version.
-
-def test(wheel_order, key, message, expected):
-    wheel_positions = list(key)
-    wheel_state = (wheel_order, wheel_positions)
+def encode_message(message, key):
+    for slot_index, slot_size in enumerate(slot_sizes):
+        wheel_name = key[0][slot_index]
+        if len(wheel_set[wheel_name]) != slot_size:
+            raise Exception(f'Wheel "{wheel_name}" does not fit in slot {slot_index}')
+    wheel_state = (key[0], list(key[1]))
     out = ''
     for letter in message:
         out += encode_letter(letter, wheel_state)
+    return out
+
+# Run some tests that the program has the same connections as the cardboard version.
+
+def test(wheel_order, wheel_positions, message, expected):
+    key = (wheel_order, wheel_positions)
+    out = encode_message(message, key)
     if out != expected:
         print('Failure, expected {} got {}'.format(expected, out))
 
 wheel_order = ('lg', 'dg', 'bl', 'pu', 're', 'or', 'pi', 'pe', 'gr')
-key = (11, 14, 12, 11, 17, 9, 9, 13, 0)
-test(wheel_order, key, 'i', 'd')
-test(wheel_order, key, 'g', 'r')
-test(wheel_order, key, 'a', 'e')
-test(wheel_order, key, 'm', 'q')
-test(wheel_order, key, 'z', 't')
-test(wheel_order, key, 'D', 'F')
-test(wheel_order, key, 'O', 'K')
-test(wheel_order, key, 'Z', 'V')
-test(wheel_order, key, 'P', 'R')
-test(wheel_order, key, '!', '/')
-test(wheel_order, key, 'x', 'f')
-test(wheel_order, key, '2', '4')
-test(wheel_order, key, '3', '🙂')
-test(wheel_order, key, '9', 'h')
-test(wheel_order, key, 'A', 'N')
-test(wheel_order, key, 'N', 'A')
-test(wheel_order, key, '1', 'k')
+wheel_positions = (11, 14, 12, 11, 17, 9, 9, 13, 0)
+test(wheel_order, wheel_positions, 'i', 'd')
+test(wheel_order, wheel_positions, 'g', 'r')
+test(wheel_order, wheel_positions, 'a', 'e')
+test(wheel_order, wheel_positions, 'm', 'q')
+test(wheel_order, wheel_positions, 'z', 't')
+test(wheel_order, wheel_positions, 'D', 'F')
+test(wheel_order, wheel_positions, 'O', 'K')
+test(wheel_order, wheel_positions, 'Z', 'V')
+test(wheel_order, wheel_positions, 'P', 'R')
+test(wheel_order, wheel_positions, '!', '/')
+test(wheel_order, wheel_positions, 'x', 'f')
+test(wheel_order, wheel_positions, '2', '4')
+test(wheel_order, wheel_positions, '3', '🙂')
+test(wheel_order, wheel_positions, '9', 'h')
+test(wheel_order, wheel_positions, 'A', 'N')
+test(wheel_order, wheel_positions, 'N', 'A')
+test(wheel_order, wheel_positions, '1', 'k')
 # Test incrementing the wheels.
-test(wheel_order, key, 'HelloWorld!', 'BaMpk.-B1Ra')
-test(wheel_order, key, 'BaMpk.-B1Ra', 'HelloWorld!')
+test(wheel_order, wheel_positions, 'HelloWorld!', 'BaMpk.-B1Ra')
+test(wheel_order, wheel_positions, 'BaMpk.-B1Ra', 'HelloWorld!')
+
+wheel_order = [wheel_name.strip() for wheel_name in args.wheelorder.split(',')]
+for wheel_name in wheel_order:
+    if wheel_name not in wheel_set.keys():
+        raise Exception(f'Wheel "{wheel_name}" not recognised')
+wheel_positions = [int(wheel_position) for wheel_position in args.wheelpositions.split(',')]
+key = (wheel_order, wheel_positions)
+if args.message:
+    message = args.message
+elif args.infile:
+    with open(args.infile) as input_file:
+        message = input_file.read()
+else:
+    raise Exception('Either a message or input file must be specified')
+out = encode_message(message, key)
+if args.outfile:
+    with open(args.outfile, 'w') as output_file:
+        output_file.write(out)
+else:
+    print(out)

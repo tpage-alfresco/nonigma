@@ -8,7 +8,7 @@ A family member designed this stunning cardboard enigma machine and so I decided
 
 ![Cardboard Nonigma Machine](cardboard-nonigma.jpg)
 
-## Usage
+## Definition
 
 The machine contains nine wheels. The eight around the edge have 18 connections each and can be interchanged with each other, while the central red wheel has 24 connections and joins onto the other eight. Around the edge of the machine are the letters and symbols. The machine works with the following 72-letter alphabet:
 
@@ -43,3 +43,25 @@ Using the starting position shown in the image we can encrypt the word `Hello`.
 * Finally the `o`connects to the `k` and we turn the dark green and red wheels again.
 
 The encrypted message is therefore `BaMpk`. To decrypt this message simply set the machine back to the starting state and repeat all the steps.
+
+## Usage
+
+The python version of the machine can be used to encrypt or decrypt messages supplied on the command line or in files.
+
+Full help can be found using the `-h` option, but here are some examples to get started.
+
+Encrypt a message from the command line:
+```
+python3 nonigma.py -w lg,dg,bl,pu,re,or,pi,pe,gr -p 11,14,12,11,17,9,9,13,0 -m "HelloWorld!"
+```
+
+Encrypt a file (ignoring unsupported characters) and output to another file:
+```
+python3 nonigma.py -w lg,dg,bl,pu,re,or,pi,pe,gr -p 11,14,12,11,17,9,9,13,0 -i example_message.txt -s -o output.txt
+```
+
+## Security
+
+The key size for this algorithm is not awful. There are eight interchangable wheels and each can be initialised in one of 18 positions. The central wheel adds a further 24 posibilities. This gives a key space of `8!*18^8*24` or `10663795450183680` potential keys - a key size of roughly 53 bits. Searching these exhaustively could take a month or so.
+
+However there are a number of issues with this algorithm which can be exploited to speed things up dramatically. A piece of English text has been encrypted in `example_encrypted.txt` and you might like to attempt to decrypt this as a challenge!
