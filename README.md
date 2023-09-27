@@ -20,7 +20,7 @@ The key for the machine consists of a sequence of colours and a sequence of numb
 
 ```
 light green, dark green, blue, purple, red, orange, pink, peach, grey
-11, 14, 12, 11, 17, 9, 9, 13, 0
+11, 14, 12, 11, 17, 9, 9, 13, 18
 ```
 
 If you have the correct colour of pens then this can be written more simply by writing each number in the appropriate colour. The middle wheel will always be red.
@@ -52,13 +52,15 @@ Full help can be found using the `-h` option, but here are some examples to get 
 
 Encrypt a message from the command line:
 ```
-python3 nonigma.py -w lg,dg,bl,pu,re,or,pi,pe,gr -p 11,14,12,11,17,9,9,13,0 -m "HelloWorld!"
+python3 nonigma.py -w lg,dg,bl,pu,re,or,pi,pe,gr -p 11,14,12,11,17,9,9,13,18 -m "HelloWorld!"
 ```
 
 Encrypt a file (ignoring unsupported characters) and output to another file:
 ```
-python3 nonigma.py -w lg,dg,bl,pu,re,or,pi,pe,gr -p 11,14,12,11,17,9,9,13,0 -i example_message.txt -s -o output.txt
+python3 nonigma.py -w lg,dg,bl,pu,re,or,pi,pe,gr -p 11,14,12,11,17,9,9,13,18 -i example_message.txt -s -o output.txt
 ```
+
+Note that the script also accepts `0` as a wheel setting for the highest number on each wheel (`18` or `24`).
 
 ## Security
 

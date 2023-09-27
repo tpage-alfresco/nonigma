@@ -91,7 +91,7 @@ def test(wheel_order, wheel_positions, message, expected):
         print('Failure, expected {} got {}'.format(expected, out))
 
 wheel_order = ('lg', 'dg', 'bl', 'pu', 're', 'or', 'pi', 'pe', 'gr')
-wheel_positions = (11, 14, 12, 11, 17, 9, 9, 13, 0)
+wheel_positions = (11, 14, 12, 11, 17, 9, 9, 13, 18)
 test(wheel_order, wheel_positions, 'i', 'd')
 test(wheel_order, wheel_positions, 'g', 'r')
 test(wheel_order, wheel_positions, 'a', 'e')
@@ -112,6 +112,9 @@ test(wheel_order, wheel_positions, '1', 'k')
 # Test incrementing the wheels.
 test(wheel_order, wheel_positions, 'HelloWorld!', 'BaMpk.-B1Ra')
 test(wheel_order, wheel_positions, 'BaMpk.-B1Ra', 'HelloWorld!')
+# Test that wheel position 0 gives the same result as 18.
+wheel_positions = (11, 14, 12, 11, 17, 9, 9, 13, 0)
+test(wheel_order, wheel_positions, 'HelloWorld!', 'BaMpk.-B1Ra')
 
 wheel_order = [wheel_name.strip() for wheel_name in args.wheelorder.split(',')]
 for wheel_name in wheel_order:
